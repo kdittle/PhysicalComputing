@@ -3,7 +3,7 @@ import processing.serial.*;
  
  void setup() 
  {
-   size(256, 150);
+   size(500, 150);
    
    println("Available serial ports:");
    println(Serial.list());
@@ -13,25 +13,22 @@ import processing.serial.*;
    // parameter (e.g. 9600) is the speed of the communication.  It
    // has to correspond to the value passed to Serial.begin() in your
    // Arduino sketch.
-    port = new Serial(this, Serial.list()[1], 9600); 
+   port = new Serial(this, Serial.list()[1], 9600);  
    
    // If you know the name of the port used by the Arduino board, you
    // can specify it directly like this.
    //port = new Serial(this, "COM1", 9600);
-}
-   
-   void draw() 
-  {
-     // draw a gradient from black to white
-     for (int i = 0; i < 256; i++) 
-     {
-       stroke(i);
-       line(i, 0, i, 150);
-     }
-     
-     // write the current X-position of the mouse to the serial port as
-     // a single byte
-     //port.write(mouseX);
-     
-     port.write(mouseX);
-  }
+ }
+ 
+ void draw() 
+ {
+   // draw a gradient from black to white
+//   for (int i = 0; i < 256; i++) {
+//   stroke(i);
+//   line(i, 0, i, 150);
+ //}
+ 
+   // write the current X-position of the mouse to the serial port as
+   // a single byte
+   port.write((byte)map(mouseX, 0, 255, 0, 500));
+ }
