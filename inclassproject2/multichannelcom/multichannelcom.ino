@@ -31,20 +31,20 @@ void loop()
   {
     case 65:
     {
-      analogWrite(ledA, 255);
+      analogWrite(ledA, digitL);
       analogWrite(ledB, 0);
       break;
     }
     case 66:
     {
-      analogWrite(ledB, 255);
+      analogWrite(ledB, digitL);
       analogWrite(ledA, 0);
       break;
     }
     case 67:
     {
-      analogWrite(ledA, 255);
-      analogWrite(ledB, 255);
+      analogWrite(ledA, digitL);
+      analogWrite(ledB, digitL);
       break;
     }
     case 68:
