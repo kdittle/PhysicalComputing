@@ -1,0 +1,12 @@
+ascii table
+
+convert ascii to a digit
+(digit = temp - 48)
+
+voltage divider
+voltabe = (R2 / R1 + R2) * voltage
+potentiometer
+pull up/pull down resistors1:14 PM 10/6/2014
+
+switches and buttons
+
