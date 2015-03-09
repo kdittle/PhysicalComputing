@@ -17,7 +17,7 @@ void setup()
 //  }
 //  
 //  noTone(speakerPin);
-    pinMode(buttonPin, INPUT);
+    //pinMode(buttonPin, INPUT);
 }
 
 void loop() 
