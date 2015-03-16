@@ -165,11 +165,11 @@ if(input == 32)
  digitalWrite(powerPinG1, LOW);
  digitalWrite(powerPinG2, LOW);
  digitalWrite(powerPinG3, LOW);
- delay(1);
+ 
  digitalWrite(groundPin1, HIGH);
  digitalWrite(groundPin2, HIGH);
  digitalWrite(groundPin3, HIGH);
- delay(1);
+ 
 }
 
 if(input >= 10 || input <= 13 || input == 32)
