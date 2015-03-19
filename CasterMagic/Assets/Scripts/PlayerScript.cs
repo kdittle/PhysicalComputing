@@ -15,8 +15,9 @@ public class PlayerScript : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
+
 		if (Health < 0)
 		{
 			Debug.Log ("DEAD");
@@ -26,5 +27,7 @@ public class PlayerScript : MonoBehaviour
 	void OnGUI()
 	{
 		GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "Score: " + Score, style);
+
+        
 	}
 }
