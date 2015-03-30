@@ -50,7 +50,6 @@
      <Compile Include="Assets\Scripts\EnemyScript.cs" />
      <Compile Include="Assets\Scripts\EnemySpawner.cs" />
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
-     <Compile Include="Assets\Scripts\ReticleScript.cs" />
  <Reference Include="LeapCSharp.NET3.5">
  <HintPath>C:/Users/kyle.dittle/Desktop/PhysicalComputing/CasterMagic/Assets/LeapCSharp.NET3.5.dll</HintPath>
  </Reference>
