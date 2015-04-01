@@ -9,12 +9,15 @@ public class PlayerScript : MonoBehaviour
 	public static int Health;
 	public static int Score;
 
+    public float distance;
+
 	public GUIStyle style;
+    public GameObject particle;
 
 	public Texture2D reticle;
 	public Rect reticleRect;
 
-    public Vector2 positionVec;
+    public bool isCharging = false;
 
 	public Vector3 lastPos;
 	public Vector3 mousePos;
@@ -37,54 +40,73 @@ public class PlayerScript : MonoBehaviour
 
 		Health = 100;
 
-		string[] ports = SerialPort.GetPortNames();
+//        string[] ports = SerialPort.GetPortNames();
 		
-//		foreach (string port in ports)
-//		{
-//			Console.WriteLine(port);
-//		}
+////		foreach (string port in ports)
+////		{
+////			Console.WriteLine(port);
+////		}
 		
-		_serialPort = new SerialPort(ports[1], 9600);
-		_serialPort.Open();
-		Debug.Log(_serialPort.PortName);
-		Debug.Log(_serialPort.BaudRate);
-		Debug.Log(_serialPort.IsOpen);
+//        _serialPort = new SerialPort(ports[1], 9600);
+//        _serialPort.Open();
+//        Debug.Log(_serialPort.PortName);
+//        Debug.Log(_serialPort.BaudRate);
+//        Debug.Log(_serialPort.IsOpen);
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
 
-        checkTimer++;
+        //checkTimer++;
 
-		if (checkTimer >= 30) 
-		{
-			_serialPort.WriteLine ("r");
+        //if (checkTimer >= 30) 
+        //{
+        //    _serialPort.WriteLine ("r");
 			
-			string value = _serialPort.ReadLine (); //read info
-			string[] vec3 = value.Split (','); //get 3 part value from arduino
+        //    string value = _serialPort.ReadLine (); //read info
+        //    string[] vec3 = value.Split (','); //get 3 part value from arduino
 			
-			//vec3[0] holds the brake/backwards value
-			if (vec3 [0] != "") 
-			{
-                positionVec.x = float.Parse(vec3[0]);
-			}
+        //    //vec3[0] holds the brake/backwards value
+        //    if (vec3 [0] != "") 
+        //    {
+        //        positionVec.x = float.Parse(vec3[0]);
+        //    }
 
-			if(vec3 [1] != "")
-			{
-                positionVec.y = float.Parse(vec3[1]);
-			}
+        //    if(vec3 [1] != "")
+        //    {
+        //        positionVec.y = float.Parse(vec3[1]);
+        //    }
 
-            Debug.Log("Serial Checked.");
+        //    Debug.Log("Serial Checked.");
 
-            checkTimer = 0;
-		}
+        //    checkTimer = 0;
+        //}
 
-        //mousePos = Input.mousePosition;
-		
-        //if (mousePos != lastPos)
-        //    lastPos = mousePos;
+        mousePos = Input.mousePosition;
 
+        if (mousePos != lastPos)
+            lastPos = mousePos;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 pos = ray.GetPoint(distance);
+        transform.position = pos;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+
+            particleSystem.Play();
+
+            isCharging = true;
+        }
+
+        if(Input.GetMouseButtonUp(0))
+        {
+            //rigidbody.AddForce(Vector3.forward);
+
+            particleSystem.Stop();
+            isCharging = false;
+        }
 
 //		if (Health < 0)
 //		{
@@ -96,13 +118,12 @@ public class PlayerScript : MonoBehaviour
 	{
 		GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "Score: " + Score, style);
 
-
-		//guiTexture.texture = reticle;
-        //reticleRect = new Rect(mousePos.x - (reticle.width / 2), (Screen.height - mousePos.y) - (reticle.height/2),
-        //                       reticle.width, reticle.height);
-
-        reticleRect = new Rect(positionVec.x - (reticle.width / 2), (Screen.height - positionVec.y) - (reticle.height / 2),
+        //guiTexture.texture = reticle;
+        reticleRect = new Rect(mousePos.x - (reticle.width / 2), (Screen.height - mousePos.y) - (reticle.height / 2),
                                reticle.width, reticle.height);
+
+        //reticleRect = new Rect(positionVec.x - (reticle.width / 2), (Screen.height - positionVec.y) - (reticle.height / 2),
+        //                       reticle.width, reticle.height);
 		
 		GUI.DrawTexture(reticleRect, reticle);
         
