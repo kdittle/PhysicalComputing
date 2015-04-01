@@ -83,16 +83,21 @@ public class PlayerScript : MonoBehaviour
         //    checkTimer = 0;
         //}
 
+	    Screen.lockCursor = true;
+
         mousePos = Input.mousePosition;
 
         if (mousePos != lastPos)
             lastPos = mousePos;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Vector3 pos = ray.GetPoint(distance);
-        transform.position = pos;
+	    if (isCharging)
+	    {
+	        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+	        Vector3 pos = ray.GetPoint(distance);
+	        transform.position = pos;
+	    }
 
-        if (Input.GetMouseButtonDown(0))
+	    if (Input.GetMouseButtonDown(0))
         {
 
             particleSystem.Play();
@@ -100,25 +105,20 @@ public class PlayerScript : MonoBehaviour
             isCharging = true;
         }
 
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(0) && isCharging)
         {
-            //rigidbody.AddForce(Vector3.forward);
-
-            particleSystem.Stop();
+            rigidbody.AddForce(Vector3.forward * 10000 * Time.deltaTime);
             isCharging = false;
         }
 
-//		if (Health < 0)
-//		{
-//			Debug.Log ("DEAD");
-//		}
+//GameObject.FindGameObjectWithTag("MainCamera").camera.gameObject.transform.Rotate();
+
 	}
 
 	void OnGUI()
 	{
 		GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "Score: " + Score, style);
 
-        //guiTexture.texture = reticle;
         reticleRect = new Rect(mousePos.x - (reticle.width / 2), (Screen.height - mousePos.y) - (reticle.height / 2),
                                reticle.width, reticle.height);
 
