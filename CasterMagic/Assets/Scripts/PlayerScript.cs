@@ -13,14 +13,12 @@ public class PlayerScript : MonoBehaviour
 
 	public GUIStyle style;
     public GameObject particle;
+    public GameObject tempParticle;
 
 	public Texture2D reticle;
-	public Rect reticleRect;
+    public Rect retRect;
 
     public bool isCharging = false;
-
-	public Vector3 lastPos;
-	public Vector3 mousePos;
 	public float nativeRatio;
 
     public float checkTimer = 0;
@@ -30,15 +28,11 @@ public class PlayerScript : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		float curRatio = (0.0f + Screen.width)/Screen.height;
-		transform.localScale.Set(nativeRatio/curRatio, 0.0f, 0.0f);
 		Screen.showCursor = false;
-		lastPos = Input.mousePosition;
-
-        reticleRect = new Rect(0 - (reticle.width / 2), (Screen.height - 0) - (reticle.height / 2),
-                       reticle.width, reticle.height);
 
 		Health = 100;
+
+        //tempParticle = Instantiate(particle, new Vector3(transform.position.x, transform.position.y, transform.position.z + distance), Quaternion.identity) as GameObject;
 
 //        string[] ports = SerialPort.GetPortNames();
 		
@@ -85,47 +79,37 @@ public class PlayerScript : MonoBehaviour
 
 	    Screen.lockCursor = true;
 
-        mousePos = Input.mousePosition;
-
-        if (mousePos != lastPos)
-            lastPos = mousePos;
 
 	    if (isCharging)
 	    {
-	        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-	        Vector3 pos = ray.GetPoint(distance);
-	        transform.position = pos;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 pos = ray.GetPoint(distance);
+            particleSystem.transform.position = pos;
 	    }
 
-	    if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
 
-            particleSystem.Play();
+            particle.gameObject.particleSystem.Play();
 
             isCharging = true;
         }
 
-        if(Input.GetMouseButtonUp(0) && isCharging)
+        if (Input.GetMouseButtonUp(0))
         {
-            rigidbody.AddForce(Vector3.forward * 10000 * Time.deltaTime);
+            particle.rigidbody.AddForce(Vector3.forward * 10000 * Time.deltaTime);
             isCharging = false;
         }
-
-//GameObject.FindGameObjectWithTag("MainCamera").camera.gameObject.transform.Rotate();
 
 	}
 
 	void OnGUI()
 	{
 		GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "Score: " + Score, style);
-
-        reticleRect = new Rect(mousePos.x - (reticle.width / 2), (Screen.height - mousePos.y) - (reticle.height / 2),
-                               reticle.width, reticle.height);
-
-        //reticleRect = new Rect(positionVec.x - (reticle.width / 2), (Screen.height - positionVec.y) - (reticle.height / 2),
-        //                       reticle.width, reticle.height);
-		
-		GUI.DrawTexture(reticleRect, reticle);
         
+        retRect = new Rect((Screen.width - reticle.width * nativeRatio) / 2, (Screen.height - reticle.height * nativeRatio) / 2, reticle.width, reticle.height);
+
+        GUI.DrawTexture(retRect, reticle);
+
 	}
 }
