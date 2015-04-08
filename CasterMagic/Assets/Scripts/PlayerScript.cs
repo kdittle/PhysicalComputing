@@ -12,8 +12,8 @@ public class PlayerScript : MonoBehaviour
     public float distance;
 
 	public GUIStyle style;
-    public GameObject particle;
-    public GameObject tempParticle;
+    public GameObject Spell;
+    private GameObject CastingSpell;
 
 	public Texture2D reticle;
     public Rect retRect;
@@ -32,15 +32,20 @@ public class PlayerScript : MonoBehaviour
 
 		Health = 100;
 
-        //tempParticle = Instantiate(particle, new Vector3(transform.position.x, transform.position.y, transform.position.z + distance), Quaternion.identity) as GameObject;
+	    
+
+
+	    //CastingSpell = GameObject.FindGameObjectWithTag("Spell");
+
+	    //tempParticle = Instantiate(particle, new Vector3(transform.position.x, transform.position.y, transform.position.z + distance), Quaternion.identity) as GameObject;
 
 //        string[] ports = SerialPort.GetPortNames();
-		
+
 ////		foreach (string port in ports)
 ////		{
 ////			Console.WriteLine(port);
 ////		}
-		
+
 //        _serialPort = new SerialPort(ports[1], 9600);
 //        _serialPort.Open();
 //        Debug.Log(_serialPort.PortName);
@@ -77,37 +82,39 @@ public class PlayerScript : MonoBehaviour
         //    checkTimer = 0;
         //}
 
-	    Screen.lockCursor = true;
-
-
 	    if (isCharging)
 	    {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 pos = ray.GetPoint(distance);
-            particleSystem.transform.position = pos;
+            CastingSpell.particleSystem.transform.position = pos;
 	    }
 
         if (Input.GetMouseButtonDown(0))
         {
 
-            particle.gameObject.particleSystem.Play();
+            CastingSpell.gameObject.particleSystem.Play();
 
             isCharging = true;
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            particle.rigidbody.AddForce(Vector3.forward * 10000 * Time.deltaTime);
+            Spell.rigidbody.AddForce(Vector3.forward * 1000);
             isCharging = false;
         }
 
+        retRect = new Rect(Screen.width - (Screen.width - Input.mousePosition.x) - (reticle.width / 2), (Screen.height - Input.mousePosition.y) - (reticle.height / 2), reticle.width, reticle.height);
+
 	}
+
+    public void CastSpell()
+    {
+        
+    }
 
 	void OnGUI()
 	{
 		GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "Score: " + Score, style);
-        
-        retRect = new Rect((Screen.width - reticle.width * nativeRatio) / 2, (Screen.height - reticle.height * nativeRatio) / 2, reticle.width, reticle.height);
 
         GUI.DrawTexture(retRect, reticle);
 
