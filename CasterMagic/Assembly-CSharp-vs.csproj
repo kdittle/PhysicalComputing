@@ -52,6 +52,10 @@
      <Compile Include="Assets\Scripts\MouseLook.cs" />
      <Compile Include="Assets\Scripts\PlayerScript.cs" />
      <Compile Include="Assets\Scripts\SpellScript.cs" />
+     <None Include="Assets\Scripts\Arduino\Adafruit_GFX\license.txt" />
+     <None Include="Assets\Scripts\Arduino\Adafruit_HX8357\README.txt" />
+     <None Include="Assets\Scripts\Arduino\Adafruit_TouchScreen\README.txt" />
+     <None Include="Assets\Scripts\Arduino\Adafruit_GFX\README.txt" />
  <Reference Include="LeapCSharp.NET3.5">
  <HintPath>C:/Users/kyle.dittle/Desktop/PhysicalComputing/CasterMagic/Assets/LeapCSharp.NET3.5.dll</HintPath>
  </Reference>
