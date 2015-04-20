@@ -4,6 +4,8 @@ using System.Collections;
 public class SpellScript : MonoBehaviour 
 {
 
+    private GameObject SpellObject;
+
 	// Use this for initialization
 	void Start () 
     {
@@ -13,7 +15,6 @@ public class SpellScript : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-	    
 	}
 
     void OnTriggerEnter(Collider other)
@@ -21,6 +22,16 @@ public class SpellScript : MonoBehaviour
         if (other.gameObject.tag == "DestroyTrigger")
         {
             Destroy(gameObject);
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            Destroy(gameObject);
+            Destroy(other.gameObject);
+            PlayerScript.Score += 25;
         }
     }
 }

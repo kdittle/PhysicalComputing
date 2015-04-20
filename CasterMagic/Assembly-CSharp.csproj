@@ -56,9 +56,6 @@
      <None Include="Assets\Scripts\Arduino\Adafruit_HX8357\README.txt" />
      <None Include="Assets\Scripts\Arduino\Adafruit_TouchScreen\README.txt" />
      <None Include="Assets\Scripts\Arduino\Adafruit_GFX\README.txt" />
- <Reference Include="LeapCSharp.NET3.5">
- <HintPath>C:/Users/kyle.dittle/Desktop/PhysicalComputing/CasterMagic/Assets/LeapCSharp.NET3.5.dll</HintPath>
- </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

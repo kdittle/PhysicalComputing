@@ -46,9 +46,6 @@
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="LeapCSharp.NET3.5">
-      <HintPath>Assets\LeapCSharp.NET3.5.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\DestoryScript.cs" />
@@ -61,7 +58,6 @@
     <None Include="Assets\Scripts\Arduino\Adafruit_GFX\README.txt" />
     <None Include="Assets\Scripts\Arduino\Adafruit_HX8357\README.txt" />
     <None Include="Assets\Scripts\Arduino\Adafruit_TouchScreen\README.txt" />
-    <None Include="Assets\LeapCSharp.NET3.5.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>
