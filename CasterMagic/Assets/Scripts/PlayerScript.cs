@@ -9,6 +9,8 @@ public class PlayerScript : MonoBehaviour
 {
     public static int Health;
     public static int Score;
+    public static bool isDead;
+    public bool isPlaying = false;
 
     public float distance;
 
@@ -36,8 +38,10 @@ public class PlayerScript : MonoBehaviour
     void Start()
     {
         Screen.showCursor = false;
+        isPlaying = false;
 
         Health = 100;
+        isDead = false;
 
         PlArmIdentity = PlayerArm.transform.rotation;
 
@@ -114,64 +118,85 @@ public class PlayerScript : MonoBehaviour
         //retRect = new Rect(Screen.width - (Screen.width - Input.mousePosition.x) - (reticle.width / 2), (Screen.height - Input.mousePosition.y) - (reticle.height / 2), reticle.width, reticle.height);
         #endregion
 
-        //find all enemies and add them to this list
-        foreach (GameObject t in GameObject.FindGameObjectsWithTag("Enemy"))
+        if (Health <= 0)
+            isDead = true;
+
+        if (!isDead && isPlaying)
         {
-            //check to see if the enemy is on the list already or not
-            if (!enemies.Contains(t))
-                enemies.Add(t);         //add the new enemy but not the old ones
+            //find all enemies and add them to this list
+            foreach (GameObject t in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                //check to see if the enemy is on the list already or not
+                if (!enemies.Contains(t))
+                    enemies.Add(t); //add the new enemy but not the old ones
+            }
+
+            //iterate through the list and find out if enemies are missing
+            //missing enemies come from them being destoryed.
+            //remove these enemies so that targetting can actually take place.
+            for (int i = 0; i < enemies.Count; i++)
+            {
+                if (enemies[i] == null)
+                    enemies.Remove(enemies[i]);
+            }
+
+            //Target the enemy
+            //Allows for space to be pressed multple times to scroll through possible targets
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                TargetEnemy();
+            }
+
+            //if the mouse button is pressed, the the 
+            if (Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                //main spell stuff
+                CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
+                CastingSpell.gameObject.particleSystem.Play();
+
+                //create the temp spell that will be shot
+                TempSpell =
+                    Instantiate(CastingSpell, PlayerArm.transform.GetChild(0).position, Quaternion.identity) as
+                        GameObject;
+            }
+
+            if (Input.GetKeyUp(KeyCode.Mouse0))
+            {
+                //other casting stuff
+                CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
+                CastingSpell.gameObject.particleSystem.Stop();
+
+                //switch to playing the temp particle
+                TempSpell.particleSystem.Play();
+                TempSpell.transform.position = PlayerArm.transform.GetChild(0).position;
+
+                //shoot the spell
+                TempSpell.rigidbody.AddForce(Vector3.forward*700);
+                TempSpell.AddComponent<SphereCollider>();
+                TempSpell.collider.enabled = true;
+            }
+
+            //have the player arm look at the enemy
+            if (selectedEnemy != null)
+                PlayerArm.transform.LookAt(selectedEnemy.transform);
+            else
+                PlayerArm.transform.localRotation = PlArmIdentity;
+
         }
-
-        //iterate through the list and find out if enemies are missing
-        //missing enemies come from them being destoryed.
-        //remove these enemies so that targetting can actually take place.
-        for (int i = 0; i < enemies.Count; i++)
-        {
-            if (enemies[i] == null)
-                enemies.Remove(enemies[i]);
-        }
-
-        //Target the enemy
-        //Allows for space to be pressed multple times to scroll through possible targets
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TargetEnemy();
-        }
-
-        //if the mouse button is pressed, the the 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            //main spell stuff
-            CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
-            CastingSpell.gameObject.particleSystem.Play();
-
-            //create the temp spell that will be shot
-            TempSpell = Instantiate(CastingSpell, PlayerArm.transform.GetChild(0).position, Quaternion.identity) as GameObject;
-        }
-
-        if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            //other casting stuff
-            CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
-            CastingSpell.gameObject.particleSystem.Stop();
-
-            //switch to playing the temp particle
-            TempSpell.particleSystem.Play();
-            TempSpell.transform.position = PlayerArm.transform.GetChild(0).position;
-
-            //shoot the spell
-            TempSpell.rigidbody.AddForce(Vector3.forward * 700);
-            TempSpell.AddComponent<SphereCollider>();
-            TempSpell.collider.enabled = true;
-        }
-
-        //have the player arm look at the enemy
-        if (selectedEnemy != null)
-            PlayerArm.transform.LookAt(selectedEnemy.transform);
-        else
-            PlayerArm.transform.localRotation = PlArmIdentity;
     }
+
+    void OnGUI()
+    {
+        if(isPlaying)
+            GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "" + Score, style);
+    }
+
+    public void StartGame()
+    {
+        isPlaying = true;
+    }
+
 
     public void TargetEnemy()
     {
@@ -193,10 +218,5 @@ public class PlayerScript : MonoBehaviour
 
             selectedEnemy = enemies[index]; //update the selected enemy
         }
-    }
-
-    void OnGUI()
-    {
-        GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "" + Score, style);
     }
 }
