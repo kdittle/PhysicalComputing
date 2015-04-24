@@ -161,7 +161,8 @@ public class PlayerScript : MonoBehaviour
                         GameObject;
             }
 
-            if (Input.GetKeyUp(KeyCode.Mouse0))
+
+            if (Input.GetKeyUp(KeyCode.Mouse0) && selectedEnemy != null)
             {
                 //other casting stuff
                 CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
@@ -171,8 +172,11 @@ public class PlayerScript : MonoBehaviour
                 TempSpell.particleSystem.Play();
                 TempSpell.transform.position = PlayerArm.transform.GetChild(0).position;
 
+                float dir = Vector3.Angle(PlayerArm.transform.position, selectedEnemy.transform.position);
+                
                 //shoot the spell
-                TempSpell.rigidbody.AddForce(Vector3.forward*700);
+                TempSpell.transform.rotation = new Quaternion(0, dir, 0, 0);
+                TempSpell.rigidbody.AddForce(Vector3.forward * 100);
                 TempSpell.AddComponent<SphereCollider>();
                 TempSpell.collider.enabled = true;
             }

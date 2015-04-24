@@ -39,7 +39,14 @@ public class GameManagerScript : MonoBehaviour
         {
 
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", background);
-            GUI.Label(new Rect(Screen.width / 2 * .85f, 25, 500, 150), "Caster Magic", style);
+            GUI.Label(new Rect(Screen.width / 2 * .75f, 25, 100, 150), "Caster Magic", style);
+
+            if (GUI.Button(new Rect(Screen.width/2*.90f, 350, 250, 150), "Play", style))
+            {
+                atMenu = false;
+                isPlaying = true;
+                StartGame();
+            }
         }
 
         if (atLooseScreen)
