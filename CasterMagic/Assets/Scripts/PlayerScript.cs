@@ -154,11 +154,10 @@ public class PlayerScript : MonoBehaviour
                 //main spell stuff
                 CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
                 CastingSpell.gameObject.particleSystem.Play();
+                CastingSpell.transform.localRotation = new Quaternion(0, PlayerArm.transform.GetChild(0).localRotation.y, 0, 0.0f);
 
                 //create the temp spell that will be shot
-                TempSpell =
-                    Instantiate(CastingSpell, PlayerArm.transform.GetChild(0).position, Quaternion.identity) as
-                        GameObject;
+                TempSpell = Instantiate(CastingSpell, PlayerArm.transform.GetChild(0).position, Quaternion.identity) as GameObject;
             }
 
 
@@ -171,11 +170,9 @@ public class PlayerScript : MonoBehaviour
                 //switch to playing the temp particle
                 TempSpell.particleSystem.Play();
                 TempSpell.transform.position = PlayerArm.transform.GetChild(0).position;
-
-                float dir = Vector3.Angle(PlayerArm.transform.position, selectedEnemy.transform.position);
                 
                 //shoot the spell
-                TempSpell.transform.rotation = new Quaternion(0, dir, 0, 0);
+                TempSpell.transform.localRotation = new Quaternion(0, PlayerArm.transform.GetChild(0).localRotation.y, 0, 0.0f);
                 TempSpell.rigidbody.AddForce(Vector3.forward * 100);
                 TempSpell.AddComponent<SphereCollider>();
                 TempSpell.collider.enabled = true;
