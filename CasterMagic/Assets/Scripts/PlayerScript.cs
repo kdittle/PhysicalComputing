@@ -29,6 +29,7 @@ public class PlayerScript : MonoBehaviour
 
     public bool isCharging = false;
     public float nativeRatio;
+    public bool isPaused = false;
 
     public float checkTimer = 0;
     private SerialPort _serialPort;
@@ -118,6 +119,12 @@ public class PlayerScript : MonoBehaviour
         //retRect = new Rect(Screen.width - (Screen.width - Input.mousePosition.x) - (reticle.width / 2), (Screen.height - Input.mousePosition.y) - (reticle.height / 2), reticle.width, reticle.height);
         #endregion
 
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            isPaused = true;
+            isPlaying = false;
+        }
+
         if (Health <= 0)
             isDead = true;
 
@@ -191,6 +198,20 @@ public class PlayerScript : MonoBehaviour
     {
         if(isPlaying)
             GUI.Label(new Rect(Screen.width / 2, 0, 200, 100), "" + Score, style);
+
+        if (isPaused)
+        {
+            if (GUI.Button(new Rect(Screen.width/2 - 200, Screen.height/2 - 200, 200, 200), "Resume", style))
+            {
+                isPlaying = true;
+                isPaused = false;
+            }
+
+            if (GUI.Button(new Rect(Screen.width/2 - 100, Screen.height/2 - 100, 100, 100), "Quit", style))
+            {
+                Application.Quit();
+            }
+        }
     }
 
     public void StartGame()
