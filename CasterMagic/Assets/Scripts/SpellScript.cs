@@ -3,8 +3,7 @@ using System.Collections;
 
 public class SpellScript : MonoBehaviour 
 {
-
-    private GameObject SpellObject;
+    private GameObject target;
 
 	// Use this for initialization
 	void Start () 
@@ -15,7 +14,21 @@ public class SpellScript : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
+        transform.localRotation = GameObject.FindGameObjectWithTag("PlayerArm").gameObject.transform.localRotation;
+
+        //if(target != null)
+        //{
+        //    float yAngle = target.transform.localRotation.y - transform.localRotation.y;
+        //    float xAngle = target.transform.localRotation.x - transform.localRotation.x;
+
+        //    Vector3 newVec = new Vector3(xAngle, yAngle, 0.0f);
+        //}
 	}
+
+    public void FollowTarget(GameObject _target)
+    {
+        target = _target;
+    }
 
     void OnTriggerEnter(Collider other)
     {
