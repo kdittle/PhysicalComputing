@@ -17,7 +17,7 @@ public class PlayerScript : MonoBehaviour
     public GameObject PlayerArm;
     public Quaternion PlArmIdentity;
     public GUIStyle style;
-    public GameObject Spell;
+    public GameObject[] Spells;
     private GameObject CastingSpell;
     private GameObject TempSpell;
 
@@ -29,6 +29,7 @@ public class PlayerScript : MonoBehaviour
 
     public bool isCharging = false;
     public float nativeRatio;
+    public bool isPaused = false;
 
     public float checkTimer = 0;
     private SerialPort _serialPort;
@@ -37,7 +38,7 @@ public class PlayerScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Screen.showCursor = false;
+        //Screen.showCursor = false;
         isPlaying = false;
 
         Health = 100;
@@ -45,8 +46,7 @@ public class PlayerScript : MonoBehaviour
 
         PlArmIdentity = PlayerArm.transform.rotation;
 
-        Instantiate(Spell, PlayerArm.transform.GetChild(0).position, Quaternion.identity);
-
+        Instantiate(Spells[0], PlayerArm.transform.GetChild(0).position, Quaternion.identity);
         CastingSpell = GameObject.FindGameObjectWithTag("Spell");
 
         //tempParticle = Instantiate(particle, new Vector3(transform.position.x, transform.position.y, transform.position.z + distance), Quaternion.identity) as GameObject;
@@ -148,20 +148,39 @@ public class PlayerScript : MonoBehaviour
                 TargetEnemy();
             }
 
+            //have the player arm look at the enemy
+            if (selectedEnemy != null)
+            {
+                Transform lookAt = selectedEnemy.transform;
+
+                //look at without using LookAt
+                Debug.DrawLine(lookAt.position, PlayerArm.transform.position, Color.red);
+
+                //Vector3 diffVec = lookAt.position - PlayerArm.transform.position;
+                //diffVec = diffVec + new Vector3(0.0f, 0.0f, -3.0f);
+                //Debug.Log(diffVec);
+                //Quaternion rotation = Quaternion.LookRotation(diffVec, Vector3.up);
+                //PlayerArm.transform.localRotation = rotation;
+
+                PlayerArm.transform.LookAt(selectedEnemy.transform.position + new Vector3(3.0f, 0.0f, 0.0f));
+                //CastingSpell.transform.localRotation = Quaternion.Euler(0, PlayerArm.transform.localRotation.y, 0);
+            }
+            else
+                PlayerArm.transform.localRotation = PlArmIdentity;
+
             //if the mouse button is pressed, the the 
             if (Input.GetKeyDown(KeyCode.Mouse0))
             {
                 //main spell stuff
                 CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
                 CastingSpell.gameObject.particleSystem.Play();
+                //CastingSpell.transform.localRotation = Quaternion.Euler(0, PlayerArm.transform.localRotation.y, 0);
 
                 //create the temp spell that will be shot
-                TempSpell =
-                    Instantiate(CastingSpell, PlayerArm.transform.GetChild(0).position, Quaternion.identity) as
-                        GameObject;
+                TempSpell = Instantiate(CastingSpell, PlayerArm.transform.GetChild(0).position, Quaternion.identity) as GameObject;
             }
 
-            if (Input.GetKeyUp(KeyCode.Mouse0))
+            if (Input.GetKeyUp(KeyCode.Mouse0) && selectedEnemy != null)
             {
                 //other casting stuff
                 CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
@@ -170,18 +189,14 @@ public class PlayerScript : MonoBehaviour
                 //switch to playing the temp particle
                 TempSpell.particleSystem.Play();
                 TempSpell.transform.position = PlayerArm.transform.GetChild(0).position;
-
+                
                 //shoot the spell
-                TempSpell.rigidbody.AddForce(Vector3.forward*700);
+                //TempSpell.transform.rotation = Quaternion.Euler(0, PlayerArm.transform.localRotation.y, 0);
+                TempSpell.rigidbody.AddRelativeForce(Vector3.forward * 3000);
                 TempSpell.AddComponent<SphereCollider>();
                 TempSpell.collider.enabled = true;
+                TempSpell.GetComponent<SpellScript>().FollowTarget(selectedEnemy);
             }
-
-            //have the player arm look at the enemy
-            if (selectedEnemy != null)
-                PlayerArm.transform.LookAt(selectedEnemy.transform);
-            else
-                PlayerArm.transform.localRotation = PlArmIdentity;
 
         }
     }
