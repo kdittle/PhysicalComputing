@@ -59,9 +59,9 @@ public class GameManagerScript : MonoBehaviour
         {
             Screen.showCursor = true;
             GUI.Box(new Rect(0, 0, Screen.width, Screen.height), "", background);
-            GUI.Label(new Rect(Screen.width / 2 * .75f, 25, 100, 150), "Caster Magic", style);
+            GUI.Label(new Rect(Screen.width / 2 * .70f, 25, 100, 150), "Caster Training", style);
 
-            if (GUI.Button(new Rect(Screen.width/2*.90f, 350, 250, 150), "Play", style))
+            if (GUI.Button(new Rect(Screen.width / 2 * .90f, Screen.height / 2, 250, 150), "Play", style))
             {
                 atMenu = false;
                 isPlaying = true;
@@ -91,9 +91,9 @@ public class GameManagerScript : MonoBehaviour
         if (atLooseScreen)
         {
             Screen.showCursor = true;
-            GUI.Label(new Rect(Screen.width / 2, Screen.height / 2, 200, 200), "You have failed. Your Score: " + Score, style);
+            GUI.Label(new Rect(Screen.width / 2 * .50f, Screen.height / 2, 200, 200), "You have failed. Your Score: " + Score, style);
 
-            if(GUI.Button(new Rect( Screen.width / 2 + 100, Screen.height / 2 + 100, 100, 100), "Play Again", style))
+            if(GUI.Button(new Rect( Screen.width / 2 * .75f, Screen.height / 2 + 100, 100, 100), "Play Again", style))
             {
                 Application.LoadLevel(0);
             }

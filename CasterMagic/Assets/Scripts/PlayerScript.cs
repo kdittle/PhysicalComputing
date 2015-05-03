@@ -156,25 +156,17 @@ public class PlayerScript : MonoBehaviour
                 //look at without using LookAt
                 Debug.DrawLine(lookAt.position, PlayerArm.transform.position, Color.red);
 
-                //Vector3 diffVec = lookAt.position - PlayerArm.transform.position;
-                //diffVec = diffVec + new Vector3(0.0f, 0.0f, -3.0f);
-                //Debug.Log(diffVec);
-                //Quaternion rotation = Quaternion.LookRotation(diffVec, Vector3.up);
-                //PlayerArm.transform.localRotation = rotation;
-
-                PlayerArm.transform.LookAt(selectedEnemy.transform.position + new Vector3(3.0f, 0.0f, 0.0f));
-                //CastingSpell.transform.localRotation = Quaternion.Euler(0, PlayerArm.transform.localRotation.y, 0);
+                PlayerArm.transform.LookAt(selectedEnemy.transform.position);
             }
             else
                 PlayerArm.transform.localRotation = PlArmIdentity;
 
             //if the mouse button is pressed, the the 
-            if (Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0) && selectedEnemy != null)
             {
                 //main spell stuff
                 CastingSpell.particleSystem.transform.position = PlayerArm.transform.GetChild(0).position;
                 CastingSpell.gameObject.particleSystem.Play();
-                //CastingSpell.transform.localRotation = Quaternion.Euler(0, PlayerArm.transform.localRotation.y, 0);
 
                 //create the temp spell that will be shot
                 TempSpell = Instantiate(CastingSpell, PlayerArm.transform.GetChild(0).position, Quaternion.identity) as GameObject;
@@ -191,7 +183,6 @@ public class PlayerScript : MonoBehaviour
                 TempSpell.transform.position = PlayerArm.transform.GetChild(0).position;
                 
                 //shoot the spell
-                //TempSpell.transform.rotation = Quaternion.Euler(0, PlayerArm.transform.localRotation.y, 0);
                 TempSpell.rigidbody.AddRelativeForce(Vector3.forward * 3000);
                 TempSpell.AddComponent<SphereCollider>();
                 TempSpell.collider.enabled = true;
