@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DestoryScript : MonoBehaviour 
+public class DestoryScript : MonoBehaviour
 {
+    private PlayerScript ps;
 
 	// Use this for initialization
-	void Start () 
-	{
-	
-	}
-	
-	// Update is called once per frame
+    private void Start()
+    {
+        ps = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerScript>();
+    }
+
+
+    // Update is called once per frame
 	void Update () 
 	{
 	
@@ -20,7 +22,7 @@ public class DestoryScript : MonoBehaviour
 	{
 		if (other.gameObject.tag == "Enemy") 
 		{
-			PlayerScript.Health = PlayerScript.Health - EnemyScript.damage;
+			ps.UpdateHealth(EnemyScript.damage);
 			Destroy(other.gameObject);
 		}
 	}

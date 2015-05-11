@@ -6,7 +6,7 @@ public class EnemyScript : MonoBehaviour
 	public float EnemySpeed;
 
 	public static int health;
-	public static int damage;
+	public static int damage = 10;
 
 	// Use this for initialization
 	void Start () 

@@ -7,7 +7,8 @@ using System.Collections.Generic;
 
 public class PlayerScript : MonoBehaviour
 {
-    public static int Health;
+    private int Health;
+    private int _curHealth;
     public static int Score;
     public static bool isDead;
     public bool isPlaying = false;
@@ -41,85 +42,46 @@ public class PlayerScript : MonoBehaviour
         //Screen.showCursor = false;
         isPlaying = false;
 
-        Health = 100;
+        //Health = 100;
         isDead = false;
+
+        Health = 100;
+        _curHealth = Health;
 
         PlArmIdentity = PlayerArm.transform.rotation;
 
         Instantiate(Spells[0], PlayerArm.transform.GetChild(0).position, Quaternion.identity);
         CastingSpell = GameObject.FindGameObjectWithTag("Spell");
 
-        //tempParticle = Instantiate(particle, new Vector3(transform.position.x, transform.position.y, transform.position.z + distance), Quaternion.identity) as GameObject;
+        string[] ports = SerialPort.GetPortNames();
 
-        //        string[] ports = SerialPort.GetPortNames();
+        //		foreach (string port in ports)
+        //		{
+        //			Console.WriteLine(port);
+        //		}
 
-        ////		foreach (string port in ports)
-        ////		{
-        ////			Console.WriteLine(port);
-        ////		}
-
-        //        _serialPort = new SerialPort(ports[1], 9600);
-        //        _serialPort.Open();
-        //        Debug.Log(_serialPort.PortName);
-        //        Debug.Log(_serialPort.BaudRate);
-        //        Debug.Log(_serialPort.IsOpen);
+        _serialPort = new SerialPort(ports[1], 9600);
+        _serialPort.Open();
+        Debug.Log(_serialPort.PortName);
+        Debug.Log(_serialPort.BaudRate);
+        Debug.Log(_serialPort.IsOpen);
     }
 
     // Update is called once per frame
     void Update()
     {
-        #region Old Code
-        //checkTimer++;
-
-        //if (checkTimer >= 30) 
-        //{
-        //    _serialPort.WriteLine ("r");
-
-        //    string value = _serialPort.ReadLine (); //read info
-        //    string[] vec3 = value.Split (','); //get 3 part value from arduino
-
-        //    //vec3[0] holds the brake/backwards value
-        //    if (vec3 [0] != "") 
-        //    {
-        //        positionVec.x = float.Parse(vec3[0]);
-        //    }
-
-        //    if(vec3 [1] != "")
-        //    {
-        //        positionVec.y = float.Parse(vec3[1]);
-        //    }
-
-        //    Debug.Log("Serial Checked.");
-
-        //    checkTimer = 0;
-        //}
-
-        //if (isCharging)
-        //{
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        //    Vector3 pos = ray.GetPoint(distance);
-        //    CastingSpell.particleSystem.transform.position = pos;
-        //}
-
-        //if (Input.GetMouseButtonDown(0))
-        //{
-
-        //    CastingSpell.gameObject.particleSystem.Play();
-
-        //    isCharging = true;
-        //}
-
-        //if (Input.GetMouseButtonUp(0))
-        //{
-        //    Spell.rigidbody.AddForce(Vector3.forward * 1000);
-        //    isCharging = false;
-        //}
-
-        //retRect = new Rect(Screen.width - (Screen.width - Input.mousePosition.x) - (reticle.width / 2), (Screen.height - Input.mousePosition.y) - (reticle.height / 2), reticle.width, reticle.height);
-        #endregion
 
         if (Health <= 0)
             isDead = true;
+
+        Debug.Log(Health);
+
+        if (_curHealth != Health)
+        {
+            Debug.Log("SHIT");
+            _curHealth = Health;
+            _serialPort.WriteLine("r");
+        }
 
         if (!isDead && isPlaying)
         {
@@ -143,19 +105,7 @@ public class PlayerScript : MonoBehaviour
             //Target the enemy
             //Allows for space to be pressed multple times to scroll through possible targets
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                TargetEnemy();
-            }
-
-            //have the player arm look at the enemy
-            if (selectedEnemy != null)
-            {
-                Transform lookAt = selectedEnemy.transform;
-
-                //look at without using LookAt
-                Debug.DrawLine(lookAt.position, PlayerArm.transform.position, Color.red);
-
+            if (Input.GetKeyDown(KeyCode.A))
                 PlayerArm.transform.LookAt(selectedEnemy.transform.position);
             }
             else
@@ -203,6 +153,12 @@ public class PlayerScript : MonoBehaviour
         isPlaying = true;
     }
 
+    public void UpdateHealth(int x)
+    {
+        Health -= x;
+        Debug.Log("Updated Health");
+        Debug.Log(Health);
+    }
 
     public void TargetEnemy()
     {
