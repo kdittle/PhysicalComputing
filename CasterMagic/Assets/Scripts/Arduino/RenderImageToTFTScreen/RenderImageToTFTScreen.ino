@@ -26,19 +26,23 @@ int fill = 298;
 int incoming = 0;
 
 int spaceBar = A2;
-int spacePress = 45;
+int spacePress = 39;
 int spaceValue = 0;
+int preButtonState = 0;
+int buttonState;
 
 int mouseButton = A3;
-int mouse0Press = 45;
+int mouse0Press = 43;
 int mouseValue = 0;
+boolean isButPressed = false;
+boolean hasSentPress = false;
 
 void setup(void) 
 {
-//  pinMode(spaceBar, INPUT);
-//  pinMode(mouseButton, INPUT);
-//  Keyboard.begin();
-//  Mouse.begin();
+  pinMode(spaceBar, INPUT);
+  pinMode(mouseButton, INPUT);
+  Keyboard.begin();
+  Mouse.begin();
   
   Serial.begin(9600);
   tft.begin(HX8357D);
@@ -53,13 +57,13 @@ void setup(void)
   }
   //Serial.println("OK!");
   
-  drawHealth(fill);
-  drawMana();
+drawHealth(fill);
+drawMana();
 }
 
 void loop() 
 {
-  if(Serial.available() > 0)
+if(Serial.available() > 0)
  {
    incoming = Serial.read();
    if(incoming == 114)
@@ -67,29 +71,44 @@ void loop()
      fill = fill - 10;
      drawHealth(fill);
    }
- } 
+ }
  
  spaceValue = analogRead(spaceBar);
- //Serial.println(spaceValue);
- if(spaceValue > spacePress)
+ 
+  //float Value = (spaceValue * .1) + (Value * .9);
+  
+  Serial.println(spaceValue);
+ 
+ if(spaceValue >= 40)
  {
-   Keyboard.press('A');
+   buttonState = 1;
+     //Serial.println(spaceValue);
  }
- else
+ if(spaceValue <= 34)
  {
-   Keyboard.release('A');
+   buttonState = 0;
+   //Serial.println(spaceValue);
+   //Serial.println(preButtonState);
+   //Serial.println(buttonState);
+ }
+
+ if(buttonState == 1 && preButtonState == 0)
+ {
+   Keyboard.press('a');
+   preButtonState = 1;
+   
+ }
+ //
+ if(buttonState == 0 && preButtonState == 1)
+ {
+   Keyboard.release('a');
+   preButtonState = 0;
+   
+   
  }
  
  mouseValue = analogRead(mouseButton);
- //Serial.println(mouseValue);
- if(mouseValue > mouse0Press)
- {
-   Mouse.click(MOUSE_LEFT);
- }
- else
- {
-   Mouse.release(MOUSE_LEFT);
- }
+ 
 }
 
 void drawHealth(int x)

@@ -74,11 +74,9 @@ public class PlayerScript : MonoBehaviour
         if (Health <= 0)
             isDead = true;
 
-        Debug.Log(Health);
-
         if (_curHealth != Health)
         {
-            Debug.Log("SHIT");
+            //Debug.Log("SHIT");
             _curHealth = Health;
             _serialPort.WriteLine("r");
         }
@@ -104,8 +102,16 @@ public class PlayerScript : MonoBehaviour
 
             //Target the enemy
             //Allows for space to be pressed multple times to scroll through possible targets
-
             if (Input.GetKeyDown(KeyCode.A))
+            {
+                TargetEnemy();
+                //PlayerArm.transform.LookAt(selectedEnemy.transform.position);
+            }
+            //else
+            //    PlayerArm.transform.localRotation = PlArmIdentity;
+
+            if(selectedEnemy != null)
+            {
                 PlayerArm.transform.LookAt(selectedEnemy.transform.position);
             }
             else
@@ -133,7 +139,7 @@ public class PlayerScript : MonoBehaviour
                 TempSpell.transform.position = PlayerArm.transform.GetChild(0).position;
                 
                 //shoot the spell
-                TempSpell.rigidbody.AddRelativeForce(Vector3.forward * 3000);
+                TempSpell.rigidbody.AddRelativeForce(Vector3.forward * 1000);
                 TempSpell.AddComponent<SphereCollider>();
                 TempSpell.collider.enabled = true;
                 TempSpell.GetComponent<SpellScript>().FollowTarget(selectedEnemy);
