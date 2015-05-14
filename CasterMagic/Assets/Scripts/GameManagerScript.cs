@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 
 public class GameManagerScript : MonoBehaviour
@@ -81,7 +82,12 @@ public class GameManagerScript : MonoBehaviour
                 pauseScreen = false;
             }
 
-            if (GUI.Button(new Rect(Screen.width / 2, Screen.height / 2, 100, 100), "Quit", style))
+            if(GUI.Button(new Rect(Screen.width / 2 - 35, Screen.height / 2 - 25, 100, 100), "Restart", style))
+            {
+                Application.LoadLevel(0);
+            }
+
+            if (GUI.Button(new Rect(Screen.width / 2 - 35, Screen.height / 2 + 50, 100, 100), "Quit", style))
             {
                 Application.Quit();
             }
