@@ -34,8 +34,8 @@ int buttonState;
 int mouseButton = A3;
 int mouse0Press = 43;
 int mouseValue = 0;
-boolean isButPressed = false;
-boolean hasSentPress = false;
+int preButtonState1 = 0;
+int buttonState1 = 0;
 
 void setup(void) 
 {
@@ -82,14 +82,10 @@ if(Serial.available() > 0)
  if(spaceValue >= 40)
  {
    buttonState = 1;
-     //Serial.println(spaceValue);
  }
  if(spaceValue <= 34)
  {
    buttonState = 0;
-   //Serial.println(spaceValue);
-   //Serial.println(preButtonState);
-   //Serial.println(buttonState);
  }
 
  if(buttonState == 1 && preButtonState == 0)
@@ -102,12 +98,31 @@ if(Serial.available() > 0)
  if(buttonState == 0 && preButtonState == 1)
  {
    Keyboard.release('a');
-   preButtonState = 0;
-   
-   
+   preButtonState = 0;   
  }
  
  mouseValue = analogRead(mouseButton);
+ 
+ if(mouseValue >= 40)
+ {
+   buttonState1 = 1;
+ }
+ if(mouseValue <= 34
+ {
+   buttonState1` = 0;
+ }
+ 
+ if(buttonState1 == 1 && preButtonState1 = 0)
+ {
+   Mouse.press(MOUSE_LEFT);
+   preButtonState1 = 1;
+ }
+ 
+ if(buttonState1 == 0 && preButtonState == 1)
+ {
+   Mouse.release(MOUSE_LEFT);
+   preButtonState1 = 0;
+ }
  
 }
 
